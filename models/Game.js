@@ -6,8 +6,8 @@ const gameSchema = new mongoose.Schema({
         required: true
     },
     cover: {
-        type: String,
-        required: true
+        data: Buffer,
+        contentType: String,
     },
     genre: {
         type: String,

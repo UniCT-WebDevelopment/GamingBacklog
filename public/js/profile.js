@@ -34,7 +34,7 @@ async function loadUserGames() {
                     gameItem.classList.add("game-item");
                     gameItem.innerHTML = `
                         <div class="game-cover">
-                            <img src="${game.cover}" alt="${game.name} Cover">
+                            <img src="/game-cover/${game.gameId}" alt="${game.name} Cover">
                         </div>
                         <div class="game-info">
                             <h3>${game.name}</h3>
@@ -73,7 +73,7 @@ async function loadUserGames() {
                     gameItem.classList.add("game-item");
                     gameItem.innerHTML = `
                         <div class="game-cover">
-                            <img src="${game.cover}" alt="${game.name} Cover">
+                            <img src="/game-cover/${game.gameId}" alt="${game.name} Cover">
                         </div>
                         <div class="game-info">
                             <h3>${game.name}</h3>

@@ -3,9 +3,7 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 const mongoose = require("mongoose");
 const multer = require('multer');
-const { Storage } = require('@google-cloud/storage');
 const dotenv = require('dotenv');
-const { v4: uuidv4 } = require('uuid');
 const path = require("path");
 const fs = require('fs');
 const User = require("./models/User");
@@ -18,13 +16,6 @@ const http = require("http").Server(app);
 const io = require("socket.io")(http);
 const upload = multer({ dest: 'uploads/' });
 dotenv.config();
-
-//Google storage
-const storage = new Storage({
-    keyFilename: process.env.GOOGLE_APPLICATION_CREDENTIALS,
-  });
-const bucketName = process.env.GCS_BUCKET_NAME;
-const bucket = storage.bucket(bucketName);
 
 //Commect to database
 mongoose.connect(process.env.DB_CONNECTION_STRING)
@@ -56,6 +47,38 @@ function verifyToken(req, res, next) {
         next();
     });
 }
+
+app.get('/image/user/:userId', async (req, res) => {
+    try {
+        const userId = req.params.userId
+        const user = await User.findById(userId);
+        if (!user || !user.profilePicture || !user.profilePicture.data) {
+            return res.status(404).json({ message: "Profile picture not found" });
+        }
+
+        res.set('Content-Type', user.profilePicture.contentType);
+        res.send(user.profilePicture.data);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: "Error fetching profile picture" });
+    }
+});
+
+app.get('/game-cover/:gameId', async (req, res) => {
+    try {
+        const game = await Game.findById(req.params.gameId);
+        if (!game || !game.cover || !game.cover.data) {
+            return res.status(404).json({ message: "Cover image not found" });
+        }
+
+        res.set('Content-Type', game.cover.contentType);
+        res.send(game.cover.data);
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: "Error fetching game cover" });
+    }
+});
+
 
 io.on('connection', (socket) => {
     console.log('New client connected');
@@ -160,7 +183,7 @@ app.post("/register", async (req, res) => {
 
 app.get("/profile", verifyToken, async (req, res) => {
     try {
-        const user = await User.findOne({ username: req.user.username }).exec();
+        const user = await User.findOne({ _id: req.user.id }).exec();
         if (!user) {
             return res.status(404).send("User not found");
         }
@@ -168,6 +191,7 @@ app.get("/profile", verifyToken, async (req, res) => {
             username: user.username,
             description: user.description,
             profilePicture: user.profilePicture,
+            userId: user._id,
             games: await Game.find({ addedBy: user._id }),
         });
     } catch (err) {
@@ -211,24 +235,11 @@ app.post("/settings/update", verifyToken, upload.single('picture'), async (req, 
             user.description = description;
         }
         if (profilePicture) {
-            const oldProfilePictureUrl = user.profilePicture;
-            const uniqueFileName = `${uuidv4()}-${profilePicture.originalname}`;
-            //Upload profile picture
-            await bucket.upload(profilePicture.path, {
-                destination: uniqueFileName,
-                metadata: {
-                    contentType: profilePicture.mimetype
-                }
-            });
-            //Create URL
-            const profilePictureUrl = `https://storage.googleapis.com/${bucketName}/${uniqueFileName}`
-            user.profilePicture = profilePictureUrl;
-            //Delete old file in DB
-            if (oldProfilePictureUrl && oldProfilePictureUrl !== "default-profile-pic.jpg") {
-                const oldFileName = oldProfilePictureUrl.split('/').pop();
-                await bucket.file(oldFileName).delete();
-            }
-            //Delete local file
+            const imageBuffer = fs.readFileSync(profilePicture.path);
+            user.profilePicture = {
+                data: imageBuffer,
+                contentType: profilePicture.mimetype,
+            };
             fs.unlinkSync(profilePicture.path);
         }
 
@@ -252,11 +263,6 @@ app.delete("/settings/delete-account", verifyToken, async (req, res) => {
         if (!user) {
             return res.status(404).json({ message: "User not found" });
         }
-        //Delete profile picture from google storage if present
-        if (user.profilePicture && user.profilePicture !== "default-profile-pic.jpg") {
-            const oldFileName = user.profilePicture.split('/').pop();
-            await bucket.file(oldFileName).delete();
-        }
         //Delete user-game relations from DB
         await UserGame.deleteMany({ user: req.user.id });
         //Delete user from DB
@@ -276,28 +282,23 @@ app.post("/create-game", verifyToken, upload.single('cover'), async (req, res) =
         if (!coverFile) {
             return res.status(400).json({ message: 'Cover image is required' });
         }
-        //Generate unique name
-        const uniqueFileName = `${uuidv4()}-${coverFile.originalname}`;
-        //Upload cover to google storage
-        await bucket.upload(coverFile.path, {
-            destination: uniqueFileName,
-            metadata: {
-                contentType: coverFile.mimetype
-            }
-        });
+        
+        const imageBuffer = fs.readFileSync(coverFile.path);
 
-        const coverUrl = `https://storage.googleapis.com/${bucketName}/${uniqueFileName}`
-        //Delete local file
-        fs.unlinkSync(coverFile.path);
 
         const newGame = new Game({
             name,
-            cover: coverUrl,
+            cover: {
+                data: imageBuffer, 
+                contentType: coverFile.mimetype,
+            },
             genre,
             releaseDate,
             description,
             addedBy: req.user.id,
         });
+
+        fs.unlinkSync(coverFile.path);
 
         await newGame.save();
         res.status(200).json({ message: "Game added successfully!" });

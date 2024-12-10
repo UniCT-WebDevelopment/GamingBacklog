@@ -14,14 +14,17 @@ async function loadProfile() {
                 Authorization: `Bearer ${token}`,
             },
         });
-
         //Response
         if (response.ok) {
             const userData = await response.json();
+            console.log(userData);
             document.getElementById("username").textContent = userData.username;
             document.getElementById("description").textContent = userData.description;
-            if(userData.profilePicture !== "default-profile-pic.jpg")
-                document.getElementById("profile-picture").setAttribute("src", userData.profilePicture);
+            const profilePictureUrl = userData.profilePicture && userData.profilePicture.data
+            ? `/image/user/${userData.userId}`
+            : '/img/profile.jpg'         
+
+            document.getElementById("profile-picture").setAttribute("src", profilePictureUrl);
         } else {
             console.error("Failed to fetch user profile");
             window.location.href = "/login";

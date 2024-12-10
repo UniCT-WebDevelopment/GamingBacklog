@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         const game = await response.json();
 
         document.getElementById('game-name').innerText = game.name;
-        document.getElementById('game-cover').src = game.cover;
+        document.getElementById('game-cover').src = `/game-cover/${game._id}`;
         document.getElementById('game-genre').innerHTML = `<span class=info-label>Genre:</span> ${game.genre}`;
         document.getElementById('game-release-date').innerHTML = `<span class=info-label>Release Date:</span> ${new Date(game.releaseDate).toLocaleDateString()}`;
         document.getElementById('game-description').innerText = game.description;

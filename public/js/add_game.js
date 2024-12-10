@@ -66,7 +66,7 @@ function displayGames(games, totalGames) {
         //Fill Element
         gameItem.innerHTML = `
         <div class="game-cover">
-                <img src="${game.cover}" alt="${game.name} Cover">
+                <img src="/game-cover/${game._id}" alt="${game.name} Cover">
         </div>
         <div class="game-info">
             <h3>${game.name}</h3>
