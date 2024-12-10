@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Chat</title>
+        <link rel="stylesheet" href="/css/header.css" />
+        <link rel="stylesheet" href="/css/modal.css" />
+        <link rel="stylesheet" href="/css/game.css" />
+    </head>
+    <body>
+        <header>
+            <div class="profile-info">
+                <img src="/img/profile.jpg" alt="Profile Picture" id="profile-picture"/>
+                <div class="profile-details">
+                    <h1 id="username">Username</h1>
+                    <p id="description">Description</p>
+                </div>
+            </div>
+            <nav class="menu-bar">
+                <ul>
+                    <li><a href="/profile.html">Profile</a></li>
+                    <li><a href="/add_game.html">Games</a></li>
+                    <li><a href="/settings.html">Settings</a></li>
+                    <li><a href="#" onclick="logout()">Logout</a></li>
+                </ul>
+            </nav>
+        </header>
+        <main>
+            <div id="game-details">
+                <div>
+                    <img id="game-cover" src="" alt="">
+                </div>
+                <div class="game-info">
+                    <h1 id="game-name"></h1>
+                    <p id="game-genre"></p>
+                    <p id="game-release-date"></p>
+                    <p id="game-description"></p>
+                </div>
+            </div>
+            <div id="chat-section">
+                <h2>Discussion</h2>
+                <div id="chat-messages"></div>
+                <div class="new-message">
+                    <input type="text" id="chat-input" placeholder="Type your message...">
+                    <button id="send-message">Send</button>
+                </div>
+            </div>
+            <div id="logout-modal" class="modal">
+                <div class="modal-content">
+                    <span class="close" onclick="closeLogoutModal()">&times;</span>
+                    <h2>Confirm Logout</h2>
+                    <p>Are you sure you want to log out?</p>
+                    <button onclick="confirmLogout()">Yes</button>
+                    <button onclick="closeLogoutModal()">Cancel</button>
+                </div>
+            </div>
+            <div id="message-modal" class="modal">
+                <div class="modal-content">
+                    <span class="close" onclick="closeErrorModal()">&times;</span>
+                    <h2 id="modal-title">Message</h2>
+                    <p id="modal-message"></p>
+                    <button onclick="closeErrorModal()">Close</button>
+                </div>
+            </div>
+        </main>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/js/header_info.js"></script>
+    <script src="/js/logout.js"></script>
+    <script src="/js/error_modal.js"></script>
+    <script src="/js/game.js"></script>
+    <script>
+            window.onload = function () {
+                loadProfile();
+            };
+        </script>
+    </body>
+</html>

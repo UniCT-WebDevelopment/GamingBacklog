@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Register</title>
+
+        <link rel="stylesheet" href="/css/form.css" />
+        <link rel="stylesheet" href="/css/header.css" />
+        <link rel="stylesheet" href="/css/login.css" />
+    </head>
+    <body>
+        <div class="form-container">
+            <div class="site-name">
+                <h1>GamingBacklog</h1>
+            </div>
+            <form action="/register" onsubmit="handleRegister(event)">
+                <label for="username">Username</label>
+                <input type="text" id="username" name="username" required />
+
+                <label for="password">Password</label>
+                <input type="password" id="password" name="password" required />
+
+                <button type="submit">Register</button>
+            </form>
+            <br />
+            Already have an account? <a href="/login">Login</a>
+            <div id="error-message"></div>
+            <div id="success-message"></div>
+        </div>
+    </body>
+    <script src="js/register.js"></script>
+</html>

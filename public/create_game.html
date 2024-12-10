@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Add New Game</title>
+        <link rel="stylesheet" href="/css/header.css" />
+        <link rel="stylesheet" href="/css/form.css" />
+        <link rel="stylesheet" href="/css/modal.css" />
+    </head>
+    <body>
+        <header>
+            <div class="profile-info">
+                <img src="/img/profile.jpg" alt="Profile Picture" id="profile-picture"/>
+                <div class="profile-details">
+                    <h1 id="username">Username</h1>
+                    <p id="description">Description</p>
+                </div>
+            </div>
+            <div class="menu-bar">
+                <ul>
+                    <li><a href="/profile.html">Profile</a></li>
+                    <li><a href="/add_game.html">Games</a></li>
+                    <li><a href="/settings.html">Settings</a></li>
+                    <li><a href="#" onclick="logout()">Logout</a></li>
+                </ul>
+            </div>
+        </header>
+        <main>
+            <div class="form-container">
+                <h2>Add New Game</h2>
+                <form id="add-game-form">
+                    <label for="name">Game Title</label>
+                    <input type="text" id="name" name="name" required />
+                    <label for="cover">Cover Image</label>
+                    <input type="file" id="cover" name="cover" accept="image/*" required>
+                    <label for="genre">Genre</label>
+                    <input type="text" id="genre" name="genre" required />
+                    <label for="release-date">Release Date</label>
+                    <input
+                        type="date"
+                        id="release-date"
+                        name="releaseDate"
+                        required
+                    />
+                    <label for="description">Description</label>
+                    <textarea
+                        id="description"
+                        name="description"
+                        required
+                    ></textarea>
+
+                    <button type="submit">Add Game</button>
+                </form>
+            </div>
+            <div id="logout-modal" class="modal">
+                <div class="modal-content">
+                    <span class="close" onclick="closeLogoutModal()">&times;</span>
+                    <h2>Confirm Logout</h2>
+                    <p>Are you sure you want to log out?</p>
+                    <button onclick="confirmLogout()">Yes</button>
+                    <button onclick="closeLogoutModal()">Cancel</button>
+                </div>
+            </div>
+            <div id="message-modal" class="modal">
+                <div class="modal-content">
+                    <span class="close" onclick="closeErrorModal()">&times;</span>
+                    <h2 id="modal-title">Message</h2>
+                    <p id="modal-message"></p>
+                    <button onclick="closeErrorModal()">Close</button>
+                </div>
+            </div>
+        </main>
+    <script src="/js/header_info.js"></script>
+    <script src="/js/logout.js"></script>
+    <script src="/js/error_modal.js"></script>
+    <script src="/js/create_game.js"></script>
+    <script>
+            window.onload = loadProfile;
+        </script>
+    </body>
+</html>

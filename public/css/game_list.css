@@ -1,0 +1,151 @@
+.game-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 30px;
+    width: 80%;
+    max-width: 1200px;
+    margin: 0 auto;
+    align-items: center;
+}
+
+.game-item {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    background-color: #263852;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    height: 200px;
+    width: 800px;
+    margin-bottom: 10px;
+}
+
+.game-item .game-cover {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.game-item img {
+    justify-self: center;
+    max-height: 200px;
+    width: 150px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin: 10px;
+    cursor: pointer;
+}
+
+.game-info {
+    flex: 1;
+    text-align: left;
+    color: #e4e4e4;
+    margin-left: 10px;
+}
+
+.game-info h3 {
+    cursor: pointer;
+}
+
+.game-info p {
+    margin: 5px;
+    font-size: 1.1em;
+}
+
+.game-info .info-label {
+    color: #818181;
+    
+}
+
+.game-info p.description {
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: normal;
+}
+
+.game-info button {
+    padding: 10px 20px;
+    background-color: #224163;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.game-info button:hover {
+    background-color: #305c8a;
+}
+
+button:disabled {
+    cursor: auto;
+    opacity: 0.5;
+}
+button:disabled:hover {
+    background-color: #224163;
+}
+
+.game-info .remove-button {
+    background-color: #d9544f96;
+    color: white;
+}
+
+.game-info .remove-button:hover {
+    background-color: #c9312cbd;
+}
+
+.game-list p {
+    margin-top: 0;
+    align-self: center;
+    color: #bebebe;
+}
+
+.game-list .list-header {
+    font-size: 24px;
+    font-weight: bold;
+    color: #cacaca;
+    display: flex;
+    width: 82%;
+    max-width: 1250px;
+    margin: 14px auto;
+}
+
+@media (max-width: 768px) {
+    .game-list {
+        width: 80%;
+    }
+
+    .game-item {
+        width: 100%;
+        flex-direction: column;
+        height: auto;
+    }
+
+    .game-item img {
+        width: 50%;
+        max-height: none;
+    }
+
+    .game-info {
+        text-align: center;
+        margin-left: 0;
+        margin-top: 10px;
+    }
+
+    .game-info h3 {
+        font-size: 1.2em;
+    }
+
+    .game-info p {
+        font-size: 1em;
+    }
+
+    .game-info button {
+        width: 100%;
+        margin-top: 10px;
+    }
+}

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Games</title>
+        <link rel="stylesheet" href="/css/header.css" />
+        <link rel="stylesheet" href="/css/game_list.css" />
+        <link rel="stylesheet" href="/css/search_bar.css" />
+        <link rel="stylesheet" href="/css/modal.css" />
+    </head>
+    <body>
+        <header>
+            <div class="profile-info">
+                <img src="/img/profile.jpg" alt="Profile Picture" id="profile-picture"/>
+                <div class="profile-details">
+                    <h1 id="username">Username</h1>
+                    <p id="description">Description</p>
+                </div>
+            </div>
+            <nav class="menu-bar">
+                <ul>
+                    <li><a href="/profile.html">Profile</a></li>
+                    <li><a href="/create_game.html">Add Game</a></li>
+                    <li><a href="/settings.html">Settings</a></li>
+                    <li><a href="#" onclick="logout()">Logout</a></li>
+                </ul>
+            </nav>
+        </header>
+        <main>
+            <div class="search-bar">
+                <input type="text" id="search-bar" placeholder="Search games..." onkeyup="searchGames()" />
+                <select id="sort-options" onchange="changeSortOrder()">
+                    <option value="name_asc">Name (A-Z)</option>
+                    <option value="name_desc">Name (Z-A)</option>
+                    <option value="release_date_asc">Release Date (Oldest)</option>
+                    <option value="release_date_desc">Release Date (Newest)</option>
+                </select>
+            </div>
+            </div>
+            <div class="game-list" id="game-list"></div>
+            <div class="pagination" id="pagination"></div>
+            <div id="logout-modal" class="modal">
+                <div class="modal-content">
+                    <span class="close" onclick="closeLogoutModal()">&times;</span>
+                    <h2>Confirm Logout</h2>
+                    <p>Are you sure you want to log out?</p>
+                    <button onclick="confirmLogout()">Yes</button>
+                    <button onclick="closeLogoutModal()">Cancel</button>
+                </div>
+            </div>
+            <div id="message-modal" class="modal">
+                <div class="modal-content">
+                    <span class="close" onclick="closeErrorModal()">&times;</span>
+                    <h2 id="modal-title">Message</h2>
+                    <p id="modal-message"></p>
+                    <button onclick="closeErrorModal()">Close</button>
+                </div>
+            </div>
+        </main>
+    </body>
+    <script src="/js/header_info.js"></script>
+    <script src="/js/logout.js"></script>
+    <script src="/js/error_modal.js"></script>
+    <script src="/js/add_game.js"></script>
+    <script>
+        window.onload = function () {
+            loadProfile();
+            loadGames();
+        };
+    </script>
+</html>
